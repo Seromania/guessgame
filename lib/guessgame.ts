@@ -12,6 +12,8 @@ export interface GuessGameOptions {
 }
 
 export class ScoreBoardEntry {
+    private readonly _guesser: Guesser;
+
     constructor(guesser: Guesser, points: number) {
         this._points = points;
         this._guesser = guesser;
@@ -23,7 +25,6 @@ export class ScoreBoardEntry {
         return this._points;
     }
 
-    private readonly _guesser: Guesser;
     public get guesser(): Guesser {
         return this._guesser;
     }
@@ -106,6 +107,12 @@ export class GuessGame {
     public guess(user: string, guess: number): void {
         if (this._guessGameState !== 'GuessOpen') {
             throw new Error('No guess is open');
+        }
+        if (guess < this._guessGameOptions.guessMinimum) {
+            throw new Error('Guess was lower than minimum allowed');
+        }
+        if (guess > this._guessGameOptions.guessMaximum) {
+            throw new Error('Guess was higher than maximum allowed');
         }
 
         this._currentGuess.addGuessBy(this.getGuesser(user), guess);

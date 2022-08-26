@@ -31,8 +31,8 @@ describe('GuessGame', () => {
 
     it('Should not open guess as already open', () => {
         const guessGame = new GuessGame(gameOptions);
-        expect(() => guessGame.openGuess()).to.ok;
-        expect(() => guessGame.openGuess()).to.throws;
+        guessGame.openGuess();
+        expect(() => guessGame.openGuess()).to.throw('Guess is already opened');
     });
 
     describe('Testing guess', () => {
@@ -43,26 +43,26 @@ describe('GuessGame', () => {
 
         it('Should not allow guess, no guess open', () => {
             const guessGame = new GuessGame(gameOptions);
-            expect(() => guessGame.guess('test', 5)).to.throws;
+            expect(() => guessGame.guess('test', 5)).to.throw('No guess is open');
         });
 
         it('Should not allow guess, lower than minimum', () => {
             const guessGame = new GuessGame(gameOptions);
             guessGame.openGuess();
-            expect(() => guessGame.guess('test', guessMinimum - 1)).to.throws;
+            expect(() => guessGame.guess('test', guessMinimum - 1)).to.throw('Guess was lower than minimum allowed');
         });
 
         it('Should not allow guess, higher than maximum', () => {
             const guessGame = new GuessGame(gameOptions);
             guessGame.openGuess();
-            expect(() => guessGame.guess('test', guessMaximum + 1)).to.throws;
+            expect(() => guessGame.guess('test', guessMaximum + 1)).to.throw('Guess was higher than maximum allowed');
         });
 
         it('Should not allow guess, already guessed', () => {
             const guessGame = new GuessGame(gameOptions);
             guessGame.openGuess();
             guessGame.guess('test', guessMaximum);
-            expect(() => guessGame.guess('test', guessMaximum)).to.throws;
+            expect(() => guessGame.guess('test', guessMaximum)).to.throw('User already guessed');
         });
 
         it('Should add multiple guess from multiple chatters', () => {
@@ -73,13 +73,6 @@ describe('GuessGame', () => {
             expect(guessGame.getGuessesFromCurrentGuess().length).to.equal(2);
             expect(guessGame.getGuessesFromCurrentGuess().find(_ => _.guesser.user === 'test')).to.not.undefined;
             expect(guessGame.getGuessesFromCurrentGuess().find(_ => _.guesser.user === 'test 2')).to.not.undefined;
-        });
-
-        it('Should not allow guess as already guessed', () => {
-            const guessGame = new GuessGame(gameOptions);
-            guessGame.openGuess();
-            guessGame.guess('test', guessMinimum);
-            expect(() => guessGame.guess('test', guessMaximum)).to.throws;
         });
     });
 
@@ -92,7 +85,7 @@ describe('GuessGame', () => {
 
         it('Should not close no guess open', () => {
             const guessGame = new GuessGame(gameOptions);
-            expect(() => guessGame.closeGuess(guessMaximum)).to.throws;
+            expect(() => guessGame.closeGuess(guessMaximum)).to.throw('No guess to close');
         });
 
         it('Should not close, final result too low', () => {
