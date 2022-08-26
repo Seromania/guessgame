@@ -1,0 +1,25 @@
+{
+  "name": "guessgame",
+  "version": "1.0.0",
+  "description": "A guess game",
+  "main": "guessgame.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
+    "example": "npm run build && node ./examples/example.js"
+  },
+  "keywords": [],
+  "author": "Seromania",
+  "license": "MIT",
+  "dependencies": {
+    "mocha": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^9.1.1",
+    "chai": "^4.3.6",
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.8.2"
+  }
+}
