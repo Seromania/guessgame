@@ -29,7 +29,13 @@ describe('GuessGame', () => {
         expect(() => guessGame.openGuess()).to.ok;
     });
 
-    describe('Should guess', () => {
+    it('Should not open guess as already open', () => {
+        const guessGame = new GuessGame(gameOptions);
+        expect(() => guessGame.openGuess()).to.ok;
+        expect(() => guessGame.openGuess()).to.throws;
+    });
+
+    describe('Testing guess', () => {
         it('Open guess', () => {
             const guessGame = new GuessGame(gameOptions);
             expect(() => guessGame.openGuess()).to.ok;
@@ -68,13 +74,25 @@ describe('GuessGame', () => {
             expect(guessGame.getGuessesFromCurrentGuess().find(_ => _.guesser.user === 'test')).to.not.undefined;
             expect(guessGame.getGuessesFromCurrentGuess().find(_ => _.guesser.user === 'test 2')).to.not.undefined;
         });
+
+        it('Should not allow guess as already guessed', () => {
+            const guessGame = new GuessGame(gameOptions);
+            guessGame.openGuess();
+            guessGame.guess('test', guessMinimum);
+            expect(() => guessGame.guess('test', guessMaximum)).to.throws;
+        });
     });
 
-    describe('Closing guess', () => {
+    describe('Testing Closing guess', () => {
         it('Should close fine', () => {
             const guessGame = new GuessGame(gameOptions);
             guessGame.openGuess();
             expect(guessGame.closeGuess(guessMaximum)).to.equal('No guesses were found');
+        });
+
+        it('Should not close no guess open', () => {
+            const guessGame = new GuessGame(gameOptions);
+            expect(() => guessGame.closeGuess(guessMaximum)).to.throws;
         });
 
         it('Should not close, final result too low', () => {
@@ -262,6 +280,6 @@ describe('GuessGame', () => {
             expect(scoreBoardEntries[0].points).to.equal(3);
             expect(scoreBoardEntries[1].points).to.equal(2);
             expect(scoreBoardEntries[2].points).to.equal(2);
-        })
+        });
     });
 });
